@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Goal Planner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 Financial Goal Planner</h1>
+            <p class="subtitle">Plan your financial future with actionable investment strategies</p>
+        </header>
+
+        <!-- Add Goal Form -->
+        <div class="card add-goal-card">
+            <h2>Add New Financial Goal</h2>
+            <form id="goalForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="goalName">Goal Name</label>
+                        <input type="text" id="goalName" name="name" placeholder="e.g., Buy a House, Retirement, Vacation" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="targetAmount">Target Amount ($)</label>
+                        <input type="number" id="targetAmount" name="target_amount" placeholder="100000" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentSavings">Current Savings ($)</label>
+                        <input type="number" id="currentSavings" name="current_savings" placeholder="10000" min="0" step="0.01" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="timeHorizon">Time Horizon (Years)</label>
+                        <input type="number" id="timeHorizon" name="time_horizon_years" placeholder="10" min="0.1" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="returnRate">Expected Annual Return Rate (%)</label>
+                        <input type="number" id="returnRate" name="expected_return_rate" placeholder="7" min="0" max="100" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="investmentFrequency">Investment Frequency</label>
+                        <select id="investmentFrequency" name="investment_frequency" required>
+                            <option value="monthly">Monthly</option>
+                            <option value="one_time">One-Time</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Goal</button>
+            </form>
+        </div>
+
+        <!-- Goals List -->
+        <div id="goalsContainer">
+            <h2>Your Financial Goals</h2>
+            <div id="goalsList" class="goals-list">
+                <p class="empty-state" id="emptyState">No goals added yet. Add your first financial goal above!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+
