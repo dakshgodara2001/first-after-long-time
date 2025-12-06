@@ -213,7 +213,3 @@ p1/
 - Past performance does not guarantee future results
 - Loan calculations assume fixed interest rates
 - Inflation rates are estimates and may vary
-
-## License
-
-This project is open source and available for personal use.
