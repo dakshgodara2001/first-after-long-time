@@ -62,37 +62,6 @@ For every goal, the application calculates:
 - **Total future value from all sources**
 - **Remaining amount needed** (after accounting for savings, assets, SIPs, and loans)
 
-## Installation
-
-1. **Navigate to the project directory:**
-   ```bash
-   cd /Users/daksh.godara/Desktop/p1
-   ```
-
-2. **Create a virtual environment (recommended):**
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## Running the Application
-
-1. **Start the Flask server:**
-   ```bash
-   python app.py
-   ```
-
-2. **Open your browser and navigate to:**
-   ```
-   http://localhost:5000
-   ```
-
-3. **Start planning your financial goals!**
 
 ## How to Use
 
