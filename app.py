@@ -5,10 +5,18 @@ app = Flask(__name__)
 
 # In-memory storage (in production, use a database)
 goals = []
+assets = []
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Pass user state to template for personalization
+    user_state = {
+        'has_goals': len(goals) > 0,
+        'has_assets': len(assets) > 0,
+        'goals_count': len(goals),
+        'assets_count': len(assets)
+    }
+    return render_template('index.html', user_state=user_state)
 
 @app.route('/api/goals', methods=['GET'])
 def get_goals():
@@ -22,12 +30,18 @@ def add_goal():
     
     goal = {
         'id': len(goals) + 1,
+        'goal_type': data.get('goal_type', 'custom'),
         'name': data.get('name'),
-        'target_amount': float(data.get('target_amount', 0)),
+        'target_amount': float(data.get('target_amount', 0)) if data.get('target_amount') else 0,
         'current_savings': float(data.get('current_savings', 0)),
         'time_horizon_years': float(data.get('time_horizon_years', 0)),
-        'expected_return_rate': float(data.get('expected_return_rate', 0)) / 100,  # Convert percentage to decimal
-        'investment_frequency': data.get('investment_frequency', 'monthly')  # 'monthly' or 'one_time'
+        'expected_return_rate': float(data.get('expected_return_rate', 0)) / 100 if data.get('expected_return_rate') else 0,  # Convert percentage to decimal
+        'investment_frequency': data.get('investment_frequency', 'monthly'),  # 'monthly' or 'one_time'
+        'custom_params': data.get('custom_params', {}),
+        'linked_assets': data.get('linked_assets', []),
+        'loan_options': data.get('loan_options', {}),
+        'sip_enabled': data.get('sip_enabled', False),
+        'sip_amount': float(data.get('sip_amount', 0)) if data.get('sip_amount') else 0
     }
     
     # Calculate investment requirements
@@ -66,6 +80,82 @@ def recalculate_goal(goal_id):
     # Recalculate
     goal['calculations'] = calculate_investment(goal)
     return jsonify(goal)
+
+@app.route('/api/goal-types', methods=['GET'])
+def get_goal_types():
+    """Get all available goal types with default parameters"""
+    goal_types = {
+        'retirement': {
+            'name': 'Retirement',
+            'default_tenure_years': 30,
+            'default_return_rate': 8,
+            'requires_custom_params': True
+        },
+        'early_retirement': {
+            'name': 'Early Retirement',
+            'default_tenure_years': 20,
+            'default_return_rate': 10,
+            'requires_custom_params': True
+        },
+        'build_wealth': {
+            'name': 'Build Wealth',
+            'default_tenure_years': 15,
+            'default_return_rate': 12,
+            'requires_custom_params': False
+        },
+        'house': {
+            'name': 'House Goal',
+            'default_tenure_years': 10,
+            'default_return_rate': 8,
+            'requires_custom_params': True
+        },
+        'car': {
+            'name': 'Car Goal',
+            'default_tenure_years': 5,
+            'default_return_rate': 7,
+            'requires_custom_params': True
+        },
+        'startup': {
+            'name': 'Startup Goal',
+            'default_tenure_years': 5,
+            'default_return_rate': 15,
+            'requires_custom_params': False
+        },
+        'education': {
+            'name': 'Education Goal',
+            'default_tenure_years': 10,
+            'default_return_rate': 10,
+            'requires_custom_params': True
+        },
+        'emergency': {
+            'name': 'Emergency Fund',
+            'default_tenure_years': 1,
+            'default_return_rate': 5,
+            'requires_custom_params': True
+        }
+    }
+    return jsonify({'goal_types': goal_types})
+
+@app.route('/api/assets', methods=['GET'])
+def get_assets():
+    """Get all assets"""
+    return jsonify(assets)
+
+@app.route('/api/assets', methods=['POST'])
+def add_asset():
+    """Add a new asset"""
+    data = request.json
+    
+    asset = {
+        'id': len(assets) + 1,
+        'name': data.get('name'),
+        'type': data.get('type'),
+        'current_value': float(data.get('current_value', 0)),
+        'expected_return_rate': float(data.get('expected_return_rate', 7)) / 100  # Convert percentage to decimal
+    }
+    
+    assets.append(asset)
+    return jsonify(asset), 201
 
 def calculate_investment(goal):
     """
@@ -158,4 +248,3 @@ def calculate_investment(goal):
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
-

@@ -13,48 +13,322 @@
             <p class="subtitle">Plan your financial future with actionable investment strategies</p>
         </header>
 
-        <!-- Add Goal Form -->
-        <div class="card add-goal-card">
-            <h2>Add New Financial Goal</h2>
-            <form id="goalForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="goalName">Goal Name</label>
-                        <input type="text" id="goalName" name="name" placeholder="e.g., Buy a House, Retirement, Vacation" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="targetAmount">Target Amount ($)</label>
-                        <input type="number" id="targetAmount" name="target_amount" placeholder="100000" min="0" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="currentSavings">Current Savings ($)</label>
-                        <input type="number" id="currentSavings" name="current_savings" placeholder="10000" min="0" step="0.01" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="timeHorizon">Time Horizon (Years)</label>
-                        <input type="number" id="timeHorizon" name="time_horizon_years" placeholder="10" min="0.1" step="0.1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="returnRate">Expected Annual Return Rate (%)</label>
-                        <input type="number" id="returnRate" name="expected_return_rate" placeholder="7" min="0" max="100" step="0.1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="investmentFrequency">Investment Frequency</label>
-                        <select id="investmentFrequency" name="investment_frequency" required>
-                            <option value="monthly">Monthly</option>
-                            <option value="one_time">One-Time</option>
-                        </select>
+        <!-- Personalized Hero Section -->
+        <div id="personalizedHero" class="personalized-hero">
+            <!-- Cold User State (No Goals, No Assets) -->
+            <div id="coldUserState" class="hero-state" style="display: none;">
+                <div class="hero-content">
+                    <h2 class="hero-title">Start Your Financial Journey Today</h2>
+                    <p class="hero-description">Transform your dreams into achievable financial goals with goal-based investing. Plan smarter, invest better, achieve faster.</p>
+                    <button class="btn btn-hero" onclick="document.querySelector('.tab-btn[data-tab=\"goals\"]').click()">
+                        Create Your First Goal →
+                    </button>
+                </div>
+            </div>
+
+            <!-- User with Assets but No Goals -->
+            <div id="assetsNoGoalsState" class="hero-state" style="display: none;">
+                <div class="hero-content asset-prompt">
+                    <div class="prompt-card">
+                        <h2 class="hero-title">🎯 Link Your Assets to Goals</h2>
+                        <p class="hero-description">You have <strong id="assetsCount">{{ user_state.assets_count }}</strong> asset(s) ready to work for you! Link them to goals to maximize your returns and track progress.</p>
+                        <div class="benefits-list">
+                            <div class="benefit-item">✨ <strong>Optimize Returns:</strong> See how your assets grow towards your goals</div>
+                            <div class="benefit-item">📊 <strong>Track Progress:</strong> Monitor your goal achievement in real-time</div>
+                            <div class="benefit-item">🎯 <strong>Stay Focused:</strong> Align your investments with your life goals</div>
+                        </div>
+                        <button class="btn btn-hero" onclick="document.querySelector('.tab-btn[data-tab=\"goals\"]').click()">
+                            Create Goal & Link Assets →
+                        </button>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Add Goal</button>
-            </form>
+            </div>
+
+            <!-- User with Goals - Progress Section -->
+            <div id="goalsState" class="hero-state" style="display: none;">
+                <div class="hero-content">
+                    <h2 class="hero-title">Your Goal Progress</h2>
+                    <p class="hero-description">Track your journey towards financial freedom</p>
+                    <div id="goalsProgressContainer" class="goals-progress-container">
+                        <!-- Circular progress bars will be inserted here -->
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Goals List -->
-        <div id="goalsContainer">
-            <h2>Your Financial Goals</h2>
-            <div id="goalsList" class="goals-list">
-                <p class="empty-state" id="emptyState">No goals added yet. Add your first financial goal above!</p>
+        <!-- Educational Content Section -->
+        <div class="educational-section">
+            <div class="section-header">
+                <h2>Why Goal-Based Investing?</h2>
+                <p>Goal-based investing is a strategic approach that aligns your investments with your life goals, ensuring every dollar works towards your dreams.</p>
+            </div>
+
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>Purpose-Driven</h3>
+                    <p>Every investment has a clear purpose and timeline, keeping you focused and motivated.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📈</div>
+                    <h3>Better Returns</h3>
+                    <p>Structured planning helps optimize returns based on time horizon and risk tolerance.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🛡️</div>
+                    <h3>Risk Management</h3>
+                    <p>Match investment strategies to goal timelines, reducing unnecessary risk.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">✅</div>
+                    <h3>Achievement Tracking</h3>
+                    <p>Monitor progress in real-time and adjust strategies as needed.</p>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h2>Explore Different Goal Types</h2>
+                <p>Choose the right goal type for your financial journey</p>
+            </div>
+
+            <div class="goal-types-grid">
+                <div class="goal-type-card" data-goal-type="retirement">
+                    <div class="goal-type-icon">🏖️</div>
+                    <h3>Retirement / Early Retirement</h3>
+                    <p>Build a secure retirement corpus to maintain your lifestyle and achieve financial independence.</p>
+                    <ul class="goal-features">
+                        <li>Calculate retirement corpus based on expenses</li>
+                        <li>Plan for 20-30 years of retirement</li>
+                        <li>Factor in inflation and healthcare costs</li>
+                    </ul>
+                </div>
+                <div class="goal-type-card" data-goal-type="build_wealth">
+                    <div class="goal-type-icon">💎</div>
+                    <h3>Net Worth Goal</h3>
+                    <p>Set a target net worth and build wealth systematically through strategic investments.</p>
+                    <ul class="goal-features">
+                        <li>Track total asset growth</li>
+                        <li>Set milestone targets</li>
+                        <li>Optimize asset allocation</li>
+                    </ul>
+                </div>
+                <div class="goal-type-card" data-goal-type="car">
+                    <div class="goal-type-icon">🚗</div>
+                    <h3>Car Goal</h3>
+                    <p>Save for your dream car with a clear down payment and financing strategy.</p>
+                    <ul class="goal-features">
+                        <li>Calculate down payment needed</li>
+                        <li>Explore loan vs. cash options</li>
+                        <li>Short to medium-term planning</li>
+                    </ul>
+                </div>
+                <div class="goal-type-card" data-goal-type="house">
+                    <div class="goal-type-icon">🏠</div>
+                    <h3>Home Goal</h3>
+                    <p>Plan for your dream home with down payment savings and loan planning.</p>
+                    <ul class="goal-features">
+                        <li>Calculate down payment requirements</li>
+                        <li>Plan for property appreciation</li>
+                        <li>Long-term wealth building</li>
+                    </ul>
+                </div>
+                <div class="goal-type-card" data-goal-type="startup">
+                    <div class="goal-type-icon">🚀</div>
+                    <h3>Startup Goals</h3>
+                    <p>Fund your entrepreneurial dreams with a structured capital accumulation plan.</p>
+                    <ul class="goal-features">
+                        <li>Calculate required capital</li>
+                        <li>Plan for business expenses</li>
+                        <li>Flexible timeline planning</li>
+                    </ul>
+                </div>
+                <div class="goal-type-card" data-goal-type="education">
+                    <div class="goal-type-icon">🎓</div>
+                    <h3>Education Goals</h3>
+                    <p>Save for higher education with inflation-adjusted planning for rising education costs.</p>
+                    <ul class="goal-features">
+                        <li>Account for education inflation</li>
+                        <li>Plan for your or child's education</li>
+                        <li>Long-term savings strategy</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <h2>Ready to Start Planning?</h2>
+                <p>Create your first goal and begin your journey to financial freedom</p>
+                <button class="btn btn-primary btn-large" onclick="document.querySelector('.tab-btn[data-tab=\"goals\"]').click()">
+                    Create Your First Goal
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs for different sections -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="goals">Goals</button>
+            <button class="tab-btn" data-tab="assets">Assets</button>
+        </div>
+
+        <!-- Goals Tab -->
+        <div class="tab-content active" id="goalsTab">
+            <!-- Add Goal Form -->
+            <div class="card add-goal-card">
+                <h2>Add New Financial Goal</h2>
+                <form id="goalForm">
+                    <div class="form-group">
+                        <label for="goalType">Goal Type *</label>
+                        <select id="goalType" name="goal_type" required>
+                            <option value="">Select Goal Type</option>
+                            <option value="retirement">Retirement</option>
+                            <option value="emergency">Emergency Fund</option>
+                            <option value="build_wealth">Build Wealth</option>
+                            <option value="house">House Goal</option>
+                            <option value="car">Car Goal</option>
+                            <option value="education">Education Goal</option>
+                            <option value="marriage">Marriage Goal</option>
+                            <option value="child_education">Child Education</option>
+                            <option value="child_marriage">Child Marriage</option>
+                            <option value="startup">Start-up Goal</option>
+                            <option value="custom">Custom Goal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goalName">Goal Name *</label>
+                        <input type="text" id="goalName" name="name" placeholder="Enter goal name" required>
+                    </div>
+
+                    <div id="customParamsContainer" class="custom-params-container"></div>
+
+                    <div class="form-group">
+                        <label for="targetAmount">Target Amount ($)</label>
+                        <input type="number" id="targetAmount" name="target_amount" placeholder="Auto-calculated or enter manually" min="0" step="0.01">
+                        <small class="help-text">Leave empty to auto-calculate based on goal type</small>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="currentSavings">Current Savings ($)</label>
+                            <input type="number" id="currentSavings" name="current_savings" placeholder="0" min="0" step="0.01" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="timeHorizon">Time Horizon (Years) *</label>
+                            <input type="number" id="timeHorizon" name="time_horizon_years" placeholder="Auto-filled" min="0.1" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="returnRate">Expected Annual Return Rate (%)</label>
+                            <input type="number" id="returnRate" name="expected_return_rate" placeholder="Auto-filled" min="0" max="100" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="investmentFrequency">Investment Frequency</label>
+                            <select id="investmentFrequency" name="investment_frequency" required>
+                                <option value="monthly">Monthly</option>
+                                <option value="one_time">One-Time</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- SIP Section -->
+                    <div class="section-divider">
+                        <h3>Systematic Investment Plan (SIP)</h3>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="sipEnabled" name="sip_enabled">
+                                Enable SIP
+                            </label>
+                        </div>
+                        <div class="form-group" id="sipAmountGroup" style="display: none;">
+                            <label for="sipAmount">Monthly SIP Amount ($)</label>
+                            <input type="number" id="sipAmount" name="sip_amount" placeholder="5000" min="0" step="0.01" value="0">
+                        </div>
+                    </div>
+
+                    <!-- Loan Options Section -->
+                    <div class="section-divider">
+                        <h3>Loan Options</h3>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="loanEnabled" name="loan_enabled">
+                                Consider Loan Option
+                            </label>
+                        </div>
+                        <div id="loanOptionsGroup" style="display: none;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="loanAmount">Loan Amount ($)</label>
+                                    <input type="number" id="loanAmount" name="loan_amount" placeholder="0" min="0" step="0.01" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="loanInterestRate">Interest Rate (%)</label>
+                                    <input type="number" id="loanInterestRate" name="loan_interest_rate" placeholder="8.5" min="0" max="100" step="0.1" value="8.5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="loanTenure">Loan Tenure (Years)</label>
+                                    <input type="number" id="loanTenure" name="loan_tenure" placeholder="20" min="1" step="0.1" value="20">
+                                </div>
+                            </div>
+                            <div id="emiDisplay" class="emi-display"></div>
+                        </div>
+                    </div>
+
+                    <!-- Asset Linking Section -->
+                    <div class="section-divider">
+                        <h3>Link Assets</h3>
+                        <div id="assetsList" class="assets-checkbox-list"></div>
+                        <small class="help-text">Select assets to link to this goal. Add assets in the Assets tab first.</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Goal</button>
+                </form>
+            </div>
+
+            <!-- Goals List -->
+            <div id="goalsContainer">
+                <h2>Your Financial Goals</h2>
+                <div id="goalsList" class="goals-list">
+                    <p class="empty-state" id="emptyState">No goals added yet. Add your first financial goal above!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assets Tab -->
+        <div class="tab-content" id="assetsTab">
+            <div class="card">
+                <h2>Manage Assets</h2>
+                <form id="assetForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="assetName">Asset Name *</label>
+                            <input type="text" id="assetName" name="name" placeholder="e.g., Savings Account, Mutual Fund" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="assetType">Asset Type *</label>
+                            <select id="assetType" name="type" required>
+                                <option value="savings">Savings</option>
+                                <option value="investment">Investment</option>
+                                <option value="property">Property</option>
+                                <option value="stocks">Stocks</option>
+                                <option value="mutual_fund">Mutual Fund</option>
+                                <option value="fd">Fixed Deposit</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="assetValue">Current Value ($) *</label>
+                            <input type="number" id="assetValue" name="current_value" placeholder="100000" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="assetReturnRate">Expected Return Rate (%)</label>
+                            <input type="number" id="assetReturnRate" name="expected_return_rate" placeholder="7" min="0" max="100" step="0.1" value="7">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Asset</button>
+                </form>
+
+                <div id="assetsListContainer" class="assets-list">
+                    <h3>Your Assets</h3>
+                    <div id="assetsDisplay"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -62,4 +336,3 @@
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
 </html>
-
